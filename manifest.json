@@ -19,28 +19,7 @@
         "default_popup": "popup.html"
     },
     "background": {
-        "scripts": [
-            "assist/aes.js",
-            "assist/md5.js",
-            "jsqrcode/grid.js",
-            "jsqrcode/version.js",
-            "jsqrcode/detector.js",
-            "jsqrcode/formatinf.js",
-            "jsqrcode/errorlevel.js",
-            "jsqrcode/bitmat.js",
-            "jsqrcode/datablock.js",
-            "jsqrcode/bmparser.js",
-            "jsqrcode/datamask.js",
-            "jsqrcode/rsdecoder.js",
-            "jsqrcode/gf256poly.js",
-            "jsqrcode/gf256.js",
-            "jsqrcode/decoder.js",
-            "jsqrcode/qrcode.js",
-            "jsqrcode/findpat.js",
-            "jsqrcode/alignpat.js",
-            "jsqrcode/databr.js",
-            "javascript/background.js"
-        ],
+        "page": "background.html",
         "persistent": false
     },
     "content_scripts": [
@@ -51,6 +30,7 @@
         }
     ],
     "permissions": [
+        "tabs",
         "activeTab",
         "storage"
     ],

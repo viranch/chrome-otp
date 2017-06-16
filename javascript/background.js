@@ -1,4 +1,6 @@
 var decodedPhrase;
+var otp = new KeyUtilities();
+var getCode = otp.generate;
 
 if (localStorage.phrase) {
     decodedPhrase = localStorage.phrase;
@@ -112,8 +114,41 @@ function getTotp(text) {
     }
 }
 
+function putTotp(results) {
+    chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true
+    }, function(tabs) {
+        var tab = tabs[0]
+        var url = tab.url;
+        for (var i in results) {
+            var tokens = results[i].account.split('::');
+            var page_url = tokens[1];
+            var input_name = tokens[2];
+            if (page_url && page_url === url) {
+                var code = getCode(results[i].secret);
+                var codeClipboard = document.getElementById('codeClipboard');
+                codeClipboard.value = code;
+                codeClipboard.focus();
+                codeClipboard.select();
+                document.execCommand('Copy');
+                if (input_name) {
+                    chrome.tabs.sendMessage(tab.id, {action: 'typeOtp', inputName: input_name, otp: code});
+                }
+                break;
+            }
+        }
+    });
+}
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.action === 'position') {
         getQr(sender.tab, message.info.left, message.info.top, message.info.width, message.info.height, message.info.windowWidth);
     }
+});
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status == 'complete' && tab.active) {
+	chrome.storage.sync.get(putTotp);
+  }
 });

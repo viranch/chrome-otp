@@ -115,5 +115,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         alert(message.account + chrome.i18n.getMessage('added'));
     } else if (message.action === 'text') {
         showQrCode(message.text);
+    } else if (message.action === 'typeOtp') {
+        document.getElementsByName(message.inputName)[0].value = message.otp;
     }
 });
